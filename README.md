@@ -1,2 +1,6 @@
-# hawk-game
-Hawk game for roadtrips in hawk heavy areas
+# Hawk Game
+Hawk Game 2.0!
+
+More to add here:
+Rules
+etc.

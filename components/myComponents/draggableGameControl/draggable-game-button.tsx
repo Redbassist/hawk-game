@@ -10,20 +10,29 @@ interface IDraggableGameButton {
   size: number;
   icon: ImageURISource;
   value: number;
+  x: number;
+  y: number;
 }
 
 export const DraggableGameButton: React.FC<IDraggableGameButton> = ({
   size,
   icon,
   value,
+  x,
+  y,
 }) => {
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
+  const translateX = useSharedValue(x);
+  const translateY = useSharedValue(y);
 
-  const drag = Gesture.Pan().onChange((event) => {
-    translateX.value += event.changeX;
-    translateY.value += event.changeY;
-  });
+  const drag = Gesture.Pan()
+    .onChange((event) => {
+      translateX.value += event.changeX;
+      translateY.value += event.changeY;
+    })
+    .onEnd((event) => {
+      translateX.value = x;
+      translateY.value = y;
+    });
 
   const containerStyle = useAnimatedStyle(() => {
     return {
@@ -68,6 +77,9 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: Colors.light.menuButton,
     textAlign: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
   icon: {
     width: "80%",

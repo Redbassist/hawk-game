@@ -21,8 +21,8 @@ export const DraggableGameButton: React.FC<IDraggableGameButton> = ({
   x,
   y,
 }) => {
-  const translateX = useSharedValue(x);
-  const translateY = useSharedValue(y);
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
 
   const drag = Gesture.Pan()
     .onChange((event) => {
@@ -30,8 +30,8 @@ export const DraggableGameButton: React.FC<IDraggableGameButton> = ({
       translateY.value += event.changeY;
     })
     .onEnd((event) => {
-      translateX.value = x;
-      translateY.value = y;
+      translateX.value = 0;
+      translateY.value = 0;
     });
 
   const containerStyle = useAnimatedStyle(() => {
@@ -58,6 +58,7 @@ export const DraggableGameButton: React.FC<IDraggableGameButton> = ({
           containerStyle,
           { width: size, height: size },
           styles.container,
+          { left: x, top: y },
         ]}
       >
         <Animated.Image
@@ -78,8 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.menuButton,
     textAlign: "center",
     position: "absolute",
-    top: 0,
-    left: 0,
+    zIndex: 20,
   },
   icon: {
     width: "80%",

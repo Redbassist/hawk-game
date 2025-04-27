@@ -1,71 +1,61 @@
-import { Dimensions, ImageURISource, StyleSheet, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
-
+import { StyleSheet, View, useWindowDimensions } from "react-native";
+import Animated from "react-native-reanimated";
 import { DraggableGameButton } from "../draggableGameControl/draggable-game-button";
 
 interface IGameControlsProps {
   size: number;
-  x: number;
-  y: number;
 }
 
-export const GameControls: React.FC<IGameControlsProps> = ({ size, x, y }) => {
-  const translateX = useSharedValue(x);
-  const translateY = useSharedValue(y);
-
-  const screenWidth = Dimensions.get("screen").width;
-  const screenHeight = Dimensions.get("screen").height;
-  const hawkWidth = size / 3;
-  const subWidth = size / 5;
-
-  const containerStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: translateX.value,
-        },
-        {
-          translateY: translateY.value,
-        },
-      ],
-    };
-  });
+export const GameControls: React.FC<IGameControlsProps> = ({ size }) => {
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  
+  const buttonBaseSize = Math.min(screenWidth * 0.15, size * 0.2);
+  const largeButtonSize = buttonBaseSize * 1.5;
+  
+  const buttonSpacing = buttonBaseSize * 0.5;
+  
+  const totalGroupWidth = buttonBaseSize * 2 + largeButtonSize + buttonSpacing * 2;
+  
+  const groupStartX = (screenWidth - totalGroupWidth) / 2;
+  
+  const firstButtonX = groupStartX;
+  const secondButtonX = groupStartX + buttonBaseSize + buttonSpacing;
+  const thirdButtonX = groupStartX + buttonBaseSize + buttonSpacing + largeButtonSize + buttonSpacing;
+  
+  const buttonsY = screenHeight * 0.8;
 
   return (
-    <Animated.View style={[containerStyle, styles.container]}>
+    <View style={styles.container}>
       <DraggableGameButton
         icon={require("@/assets/images/game-images/hawk.png")}
-        size={hawkWidth}
+        size={buttonBaseSize}
         value={1}
-        x={0}
-        y={0}
+        x={firstButtonX}
+        y={buttonsY}
       />
       <DraggableGameButton
         icon={require("@/assets/images/game-images/bald.png")}
-        size={subWidth}
+        size={largeButtonSize}
         value={10}
-        x={0}
-        y={0}
+        x={secondButtonX}
+        y={buttonsY}
       />
       <DraggableGameButton
         icon={require("@/assets/images/game-images/hawk.png")}
-        size={subWidth}
+        size={buttonBaseSize}
         value={-1}
-        x={0}
-        y={0}
+        x={thirdButtonX}
+        y={buttonsY}
       />
-    </Animated.View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    textAlign: "center",
     position: "absolute",
-    top: 0,
-    left: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: 10,
   },
 });

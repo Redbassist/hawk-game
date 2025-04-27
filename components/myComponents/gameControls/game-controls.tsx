@@ -22,7 +22,8 @@ export const GameControls: React.FC<IGameControlsProps> = ({ size }) => {
   const secondButtonX = groupStartX + buttonBaseSize + buttonSpacing;
   const thirdButtonX = groupStartX + buttonBaseSize + buttonSpacing + largeButtonSize + buttonSpacing;
   
-  const buttonsY = screenHeight * 0.8;
+  const bottomPadding = 150;
+  const buttonsY = screenHeight - bottomPadding;
 
   return (
     <View style={styles.container}>
